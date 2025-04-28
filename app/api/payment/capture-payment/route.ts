@@ -3,6 +3,7 @@ import { getPayPalAccessToken } from "../create-payment/route";
 import axios from "axios";
 import { Payment } from "@/lib/models/payment";
 import { Course } from "@/lib/models/course";
+import { User } from "@/lib/models/user";
 
 export async function POST(request: Request) {
   try {
@@ -62,6 +63,20 @@ export async function POST(request: Request) {
       });
 
       await payment.save();
+
+      const user = await User.findById(studentId);
+
+      if (!user) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+      }
+
+      await User.findByIdAndUpdate(
+        studentId,
+        { $addToSet: { purchasedCourses: courseId } },
+        { new: true }
+      );
+
+      console.log(user);
 
       return NextResponse.json({
         status: "success",

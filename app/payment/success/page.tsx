@@ -3,13 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
 import { CheckCircle } from "lucide-react";
+import React from "react";
 
-export default function SuccessPage({
-  searchParams,
-}: {
-  searchParams: { transactionId?: string };
-}) {
-  const transactionId = searchParams.transactionId;
+type Props = {
+  searchParams: Promise<{ transactionId?: string }>;
+};
+
+export default function SuccessPage({ searchParams }: Props) {
+  const { transactionId } = React.use(searchParams);
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">

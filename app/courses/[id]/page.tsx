@@ -279,7 +279,9 @@ export default function CoursePage({
                 <Card className="sticky top-24">
                   <CardHeader>
                     <CardTitle className="text-2xl">
-                      ${course.price.toFixed(2)}
+                      {course.price === 0
+                        ? "Course is Free"
+                        : `$${course.price.toFixed(2)}`}
                     </CardTitle>
                     <CardDescription>
                       Get full access to this course
@@ -302,13 +304,17 @@ export default function CoursePage({
                     </div>
                   </CardContent>
                   <CardFooter className="flex flex-col gap-2">
-                    {course.price > 0 && (
-                      <Link href={`/payment/${course._id}`} className="w-full">
-                        <Button className="w-full" variant="outline">
-                          Buy Now
-                        </Button>
-                      </Link>
-                    )}
+                    {course.price > 0 &&
+                      !user?.purchasedCourses?.includes(course._id) && (
+                        <Link
+                          href={`/payment/${course._id}`}
+                          className="w-full"
+                        >
+                          <Button className="w-full" variant="outline">
+                            Buy Now
+                          </Button>
+                        </Link>
+                      )}
                     <Button
                       className="w-full"
                       onClick={handleEnroll}

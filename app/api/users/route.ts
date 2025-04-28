@@ -57,7 +57,6 @@ export async function GET(request: Request) {
   try {
     await connectToDatabase();
 
-    // Fetch all users (you might want to add pagination or filtering)
     const users = await User.find()
       .populate("enrolledCourses")
       .populate("teachingCourses");

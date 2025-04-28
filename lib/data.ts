@@ -11,6 +11,7 @@ export interface User {
   name: string;
   email: string;
   paypalEmail?: string;
+  purchasedCourses?: string[];
   role: "student" | "teacher" | "admin";
   avatar?: string;
   bio?: string;

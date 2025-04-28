@@ -33,10 +33,9 @@ export const MainNav = () => {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
 
-  // Hàm xử lý đăng xuất
   const handleSignOut = async () => {
     try {
-      await signOut(); // Gọi hàm signOut từ useAuth
+      await signOut();
     } catch (error) {
       console.error("Failed to sign out:", error);
     }
@@ -64,7 +63,7 @@ export const MainNav = () => {
           icon: <PieChart className="mr-2 h-4 w-4" />,
         },
         {
-          href: "/teacher/dashboard",
+          href: "/teacher/courses",
           label: "Courses",
           icon: <BookOpen className="mr-2 h-4 w-4" />,
         },
@@ -118,9 +117,9 @@ export const MainNav = () => {
         </Link>
 
         <nav className="flex items-center space-x-6 text-sm font-medium">
-          {navConfig.common.map((item) => (
+          {navConfig.common.map((item, idx) => (
             <Link
-              key={item.href}
+              key={`${item.href}-${idx}`}
               href={item.href}
               className={cn(
                 "transition-colors hover:text-foreground/80",
