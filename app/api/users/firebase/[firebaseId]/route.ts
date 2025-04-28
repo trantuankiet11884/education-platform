@@ -8,13 +8,10 @@ export async function GET(
 ) {
   try {
     const { firebaseId } = params;
-    console.log("Fetching user with firebaseId:", firebaseId);
 
     await connectToDatabase();
 
     const user = await User.findOne({ firebaseId });
-
-    console.log("User found:", user);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

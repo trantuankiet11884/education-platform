@@ -53,8 +53,6 @@ export default function PaymentPage({ params }: PaymentProps) {
     );
   }
 
-  console.log(course);
-
   if (error || !course) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -110,7 +108,6 @@ export default function PaymentPage({ params }: PaymentProps) {
                   if (data.orderID) {
                     return data.orderID;
                   }
-                  console.log(data);
                   throw new Error(
                     data.error || "Failed to create PayPal order"
                   );

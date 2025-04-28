@@ -97,9 +97,6 @@ export default function CreateQuizPage() {
     return <p>Access denied. Only teachers can create quizzes.</p>;
   }
 
-  // Log để kiểm tra dữ liệu
-  console.log("Courses Data:", coursesData);
-
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">

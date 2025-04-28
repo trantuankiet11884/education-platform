@@ -135,7 +135,7 @@ export default function AdminCoursesPage() {
       },
       enabled: !!user && user.role === "admin",
     });
-  console.log(coursesData);
+
   // Update course mutation
   const updateCourseMutation = useMutation({
     mutationFn: async ({

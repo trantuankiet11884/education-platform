@@ -53,7 +53,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    console.log("User verified successfully:", user);
     return NextResponse.json({
       firebaseId: user.firebaseId,
       role: user.role,

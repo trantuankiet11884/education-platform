@@ -21,7 +21,6 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("Request body:", body);
     await connectToDatabase();
 
     // Validate courseId

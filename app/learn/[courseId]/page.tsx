@@ -306,7 +306,6 @@ export default function LearnPage({
                     <div className="flex gap-2">
                       <Button
                         onClick={() => {
-                          console.log("click");
                           markAsComplete(activeLeasonData._id);
                         }}
                         disabled={enrollment?.completedLessons?.includes(

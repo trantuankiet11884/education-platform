@@ -6,7 +6,6 @@ import { connectToDatabase } from "@/lib/db";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log("Creating user with data:", body);
 
     await connectToDatabase();
 
@@ -26,13 +25,11 @@ export async function POST(request: Request) {
       firebaseId: body.firebaseId,
     });
     if (existingUserByFirebaseId) {
-      console.log("User already exists with firebaseId:", body.firebaseId);
       return NextResponse.json(existingUserByFirebaseId);
     }
 
     const existingUserByEmail = await User.findOne({ email: body.email });
     if (existingUserByEmail) {
-      console.log("User already exists with email:", body.email);
       existingUserByEmail.firebaseId = body.firebaseId;
       await existingUserByEmail.save();
       return NextResponse.json(existingUserByEmail);
@@ -44,7 +41,6 @@ export async function POST(request: Request) {
     });
 
     await user.save();
-    console.log("User created successfully:", user);
 
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
@@ -65,8 +61,6 @@ export async function GET(request: Request) {
     const users = await User.find()
       .populate("enrolledCourses")
       .populate("teachingCourses");
-
-    console.log("Fetched all users:", users.length);
 
     return NextResponse.json(users);
   } catch (error) {
