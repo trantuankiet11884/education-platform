@@ -83,7 +83,7 @@ education-platform/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/education-platform.git
+   git clone https://github.com/trantuankiet11884/education-platform.git
    cd education-platform
    ```
 
@@ -136,6 +136,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Contact
 
-Project Maintainer - your.email@example.com
+Project Maintainer - trantuankiet11884@gmail.com
 
-Project Link: [https://github.com/your-username/education-platform](https://github.com/your-username/education-platform)
+Project Link: [https://github.com/trantuankiet11884/education-platform](https://github.com/trantuankiet11884/education-platform)

@@ -1,9 +1,0 @@
-Call real api teacher 
-create static page: about, terms, policy, not found, add new content footer
-re write function logout
-add features: admin: dashboard, users, courses with real api
-add features: handleEnroll with user real api, submit the quiz attempt to the real API
-add features: Manage the actual implementation of new features for user, teacher, and admin with real api
-add features: add new pagination for all real api
-add features: history quizzes, courses for user with real api
-add features: create quizzes, books, courses for teacher and admin with real api
