@@ -17,6 +17,8 @@ export interface ICourse extends Document {
   enrollmentCount: number;
   createdAt: Date;
   updatedAt: Date;
+  isPublished: boolean;
+  reviews: mongoose.Types.ObjectId[];
 }
 
 const CourseSchema = new Schema<ICourse>({
@@ -41,6 +43,20 @@ const CourseSchema = new Schema<ICourse>({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   isPublished: { type: Boolean, default: false },
+  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+});
+
+CourseSchema.pre("save", async function (next) {
+  if (this.reviews.length > 0) {
+    const reviews = await mongoose
+      .model("Review")
+      .find({ _id: { $in: this.reviews } });
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    this.rating = totalRating / reviews.length;
+  } else {
+    this.rating = 0;
+  }
+  next();
 });
 
 export const Course =

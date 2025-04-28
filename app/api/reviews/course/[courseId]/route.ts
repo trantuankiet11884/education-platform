@@ -1,18 +1,23 @@
-import { NextResponse } from "next/server"
-import { Review } from "@/lib/models/review"
-import { connectToDatabase } from "@/lib/db"
+import { NextRequest, NextResponse } from "next/server";
+import { connectToDatabase } from "@/lib/db";
+import { Review } from "@/lib/models/review";
 
-export async function GET(request: Request, { params }: { params: { courseId: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+) {
   try {
-    const { courseId } = params
-    await connectToDatabase()
-
-    const reviews = await Review.find({ courseId }).populate("userId", "name avatar").sort({ createdAt: -1 })
-
-    return NextResponse.json(reviews)
+    await connectToDatabase();
+    const { courseId } = params;
+    const reviews = await Review.find({ courseId }).populate(
+      "userId",
+      "name avatar"
+    );
+    return NextResponse.json(reviews);
   } catch (error) {
-    console.error("Error fetching reviews:", error)
-    return NextResponse.json({ error: "Failed to fetch reviews" }, { status: 500 })
+    return NextResponse.json(
+      { message: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
-

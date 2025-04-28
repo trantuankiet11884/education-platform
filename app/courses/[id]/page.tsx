@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { coursesApi, lessonsApi, enrollmentsApi } from "@/lib/api";
+import { coursesApi, lessonsApi, enrollmentsApi, reviewsApi } from "@/lib/api";
 import { useAuth } from "@/lib/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { MainNav } from "@/components/main-nav";
 import { Footer } from "@/components/footer";
@@ -20,6 +20,11 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import React from "react";
+import TabsOverview from "@/components/tabs/tab-overview";
+import TabsCurriculum from "@/components/tabs/tab-curriculum";
+import TabsInstructor from "@/components/tabs/tabs-instructor";
+import TabsReviews from "@/components/tabs/tabs-reviews";
+import { Review } from "@/lib/data";
 
 export default function CoursePage({
   params,
@@ -45,7 +50,13 @@ export default function CoursePage({
     enabled: !!course,
   });
 
-  // Check if user is already enrolled
+  const { data: reviews = [], isLoading: reviewsLoading } = useQuery({
+    queryKey: ["reviews", id],
+    queryFn: () => reviewsApi.getByCourseId(id),
+    enabled: !!course,
+  });
+
+  // Check if user is enrolled
   const { data: userEnrollments = [], isLoading: enrollmentsLoading } =
     useQuery({
       queryKey: ["user-enrollments", user?._id],
@@ -63,7 +74,6 @@ export default function CoursePage({
   const enrollMutation = useMutation({
     mutationFn: async () => {
       if (!user || !course) throw new Error("User or course not found");
-
       return await enrollmentsApi.create({
         userId: user._id,
         courseId: course._id,
@@ -83,10 +93,100 @@ export default function CoursePage({
       router.push(`/learn/${id}`);
     },
     onError: (error) => {
-      console.error("Error enrolling in course:", error);
       toast({
         title: "Error",
         description: "Failed to enroll in course. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Create review mutation
+  const createReviewMutation = useMutation({
+    mutationFn: async (data: { rating: number; comment: string }) => {
+      if (!user || !course) throw new Error("User or course not found");
+      return await reviewsApi.create({
+        userId: {
+          _id: user?._id,
+          name: user?.name,
+          avatar: user?.avatar || "",
+        },
+        courseId: course._id,
+        rating: data.rating,
+        comment: data.comment,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      toast({
+        title: "Review submitted",
+        description: "Your review has been successfully submitted.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to submit review.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Update review mutation
+  const updateReviewMutation = useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: { rating: number; comment: string };
+    }) => {
+      if (!user || !course) throw new Error("User or course not found");
+      return await reviewsApi.update(id, {
+        userId: {
+          _id: user?._id,
+          name: user?.name,
+          avatar: user?.avatar || "",
+        },
+
+        courseId: course._id,
+        rating: data.rating,
+        comment: data.comment,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      toast({
+        title: "Review updated",
+        description: "Your review has been successfully updated.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update review.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete review mutation
+  const deleteReviewMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (!user) throw new Error("User not found");
+      return await reviewsApi.delete(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      toast({
+        title: "Review deleted",
+        description: "Your review has been successfully deleted.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete review.",
         variant: "destructive",
       });
     },
@@ -101,16 +201,15 @@ export default function CoursePage({
       router.push("/auth/login");
       return;
     }
-
     if (isEnrolled) {
       router.push(`/learn/${id}`);
       return;
     }
-
     enrollMutation.mutate();
   };
 
-  const isLoading = courseLoading || lessonsLoading || enrollmentsLoading;
+  const isLoading =
+    courseLoading || lessonsLoading || enrollmentsLoading || reviewsLoading;
 
   if (isLoading) {
     return (
@@ -149,6 +248,17 @@ export default function CoursePage({
       </div>
     );
   }
+
+  const userReview = reviews.find(
+    (review) => review?.userId?._id === user?._id
+  );
+
+  const calculateAverageRating = (reviews: Review[]) => {
+    if (!reviews || reviews.length === 0) return 0;
+
+    const sum = reviews.reduce((total, review) => total + review.rating, 0);
+    return (sum / reviews.length).toFixed(1);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -195,83 +305,21 @@ export default function CoursePage({
                     <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
                     <TabsTrigger value="instructor">Instructor</TabsTrigger>
+                    <TabsTrigger value="reviews">Reviews</TabsTrigger>
                   </TabsList>
-                  <TabsContent value="overview" className="mt-4">
-                    <div className="prose dark:prose-invert max-w-none">
-                      <p>{course.description}</p>
-                      <h3>What you'll learn</h3>
-                      <ul>
-                        <li>
-                          Build real-world applications with the latest
-                          technologies
-                        </li>
-                        <li>Understand core concepts and best practices</li>
-                        <li>Implement industry-standard solutions</li>
-                        <li>Deploy your applications to production</li>
-                      </ul>
-                      <h3>Requirements</h3>
-                      <ul>
-                        <li>Basic understanding of programming concepts</li>
-                        <li>A computer with internet access</li>
-                        <li>Enthusiasm to learn and practice</li>
-                      </ul>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="curriculum" className="mt-4">
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-bold">Course Content</h3>
-                      <p>
-                        {course.lessonCount} lessons •{" "}
-                        {Math.round(course.duration / 60)} hours total
-                      </p>
-                      <div className="space-y-2">
-                        {lessons.map((lesson) => (
-                          <Card key={lesson._id}>
-                            <CardHeader className="p-4">
-                              <div className="flex justify-between items-center">
-                                <CardTitle className="text-base">
-                                  {lesson.title}
-                                </CardTitle>
-                                <span className="text-sm text-muted-foreground">
-                                  {lesson.duration} min
-                                </span>
-                              </div>
-                            </CardHeader>
-                          </Card>
-                        ))}
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="instructor" className="mt-4">
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-full overflow-hidden">
-                          <img
-                            src={
-                              course.instructor?.avatar ||
-                              "/placeholder.svg?height=64&width=64"
-                            }
-                            alt={course.instructor?.name || "Instructor"}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold">
-                            {course.instructor?.name || "Unknown Instructor"}
-                          </h3>
-                          <p className="text-muted-foreground">
-                            {course.instructor?.role || "Instructor"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="prose dark:prose-invert max-w-none">
-                        <p>
-                          {course.instructor?.bio ||
-                            "No bio available for this instructor."}
-                        </p>
-                      </div>
-                    </div>
-                  </TabsContent>
+                  <TabsOverview course={course} />
+                  <TabsCurriculum course={course} lessons={lessons} />
+                  <TabsInstructor course={course} />
+                  <TabsReviews
+                    reviews={reviews}
+                    isEnrolled={isEnrolled}
+                    user={user}
+                    userReview={userReview}
+                    courseId={id}
+                    createReviewMutation={createReviewMutation}
+                    updateReviewMutation={updateReviewMutation}
+                    deleteReviewMutation={deleteReviewMutation}
+                  />
                 </Tabs>
               </div>
 
@@ -295,7 +343,10 @@ export default function CoursePage({
                       </div>
                       <div className="flex items-center gap-2">
                         <span>⭐</span>
-                        <span>{course.rating.toFixed(1)} rating</span>
+                        <span>
+                          {calculateAverageRating(reviews)} ({reviews.length}{" "}
+                          {reviews.length === 1 ? "review" : "reviews"})
+                        </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span>👥</span>

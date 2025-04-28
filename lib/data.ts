@@ -70,7 +70,11 @@ export interface Enrollment {
 
 export interface Review {
   _id: string;
-  userId: string;
+  userId: {
+    _id: string;
+    name: string;
+    avatar: string;
+  };
   courseId: Course | string;
   rating: number;
   comment: string;
