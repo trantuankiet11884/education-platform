@@ -30,6 +30,7 @@ import { Switch } from "@/components/ui/switch";
 
 // Import interfaces
 import { Course, Lesson } from "@/lib/data"; // Adjust path if needed
+import Link from "next/link";
 
 export default function EditLessonPage({
   params,
@@ -183,12 +184,9 @@ export default function EditLessonPage({
               <h1 className="text-3xl font-bold">
                 Edit Lesson: {lesson?.title || "Loading..."}
               </h1>
-              <Button
-                variant="outline"
-                onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-              >
-                Cancel
-              </Button>
+              <Link href={`/teacher/courses/${coursesId}`}>
+                <Button variant="outline">Cancel</Button>
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -281,13 +279,11 @@ export default function EditLessonPage({
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-                  >
-                    Cancel
-                  </Button>
+                  <Link href={`/teacher/courses/${coursesId}`}>
+                    <Button variant="outline" type="button">
+                      Cancel
+                    </Button>
+                  </Link>
                   <Button
                     type="submit"
                     disabled={updateLessonMutation.isPending}

@@ -35,6 +35,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Course } from "@/lib/data";
+import Link from "next/link";
 
 // Import interfaces
 
@@ -188,12 +189,9 @@ export default function EditCoursePage({
               <h1 className="text-3xl font-bold">
                 Edit Course: {course?.title || "Loading..."}
               </h1>
-              <Button
-                variant="outline"
-                onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-              >
-                Cancel
-              </Button>
+              <Link href={`/teacher/courses/${coursesId}`}>
+                <Button variant="outline">Cancel</Button>
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -296,13 +294,11 @@ export default function EditCoursePage({
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-                  >
-                    Cancel
-                  </Button>
+                  <Link href={`/teacher/courses/${coursesId}`}>
+                    <Button variant="outline" type="button">
+                      Cancel
+                    </Button>
+                  </Link>
                   <Button
                     type="submit"
                     disabled={updateCourseMutation.isPending}

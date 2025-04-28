@@ -7,6 +7,7 @@ export interface IUser extends Document {
   role: "student" | "teacher" | "admin";
   avatar?: string;
   bio?: string;
+  paypalEmail?: string;
   createdAt: Date;
   enrolledCourses?: mongoose.Types.ObjectId[];
   teachingCourses?: mongoose.Types.ObjectId[];
@@ -23,6 +24,7 @@ const UserSchema = new Schema<IUser>({
   },
   avatar: { type: String },
   bio: { type: String },
+  paypalEmail: { type: String },
   createdAt: { type: Date, default: Date.now },
   enrolledCourses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
   teachingCourses: [{ type: Schema.Types.ObjectId, ref: "Course" }],

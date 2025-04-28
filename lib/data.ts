@@ -10,6 +10,7 @@ export interface User {
   _id: string;
   name: string;
   email: string;
+  paypalEmail?: string;
   role: "student" | "teacher" | "admin";
   avatar?: string;
   bio?: string;

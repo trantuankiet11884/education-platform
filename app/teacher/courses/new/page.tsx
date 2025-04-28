@@ -31,6 +31,7 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Link } from "lucide-react";
 
 export default function NewCoursePage() {
   const { user, loading } = useAuth();
@@ -150,12 +151,9 @@ export default function NewCoursePage() {
                   Fill in the details to create a new course
                 </p>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/teacher/dashboard")}
-              >
-                Cancel
-              </Button>
+              <Link href={"/teacher/dashboard"}>
+                <Button variant="outline">Cancel</Button>
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -268,13 +266,10 @@ export default function NewCoursePage() {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => router.push("/teacher/dashboard")}
-                  >
-                    Cancel
-                  </Button>
+                  <Link href={"/teacher/dashboard"}>
+                    <Button variant="outline">Cancel</Button>
+                  </Link>
+
                   <Button
                     type="submit"
                     disabled={createCourseMutation.isPending}

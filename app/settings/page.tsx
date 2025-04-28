@@ -18,6 +18,7 @@ import { MainNav } from "@/components/main-nav";
 import { Footer } from "@/components/footer";
 import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const { user, loading, signOut } = useAuth();
@@ -132,13 +133,11 @@ export default function SettingsPage() {
                 <CardDescription>Manage your account settings</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => router.push("/profile")}
-                >
-                  Edit Profile
-                </Button>
+                <Link href={"/profile"}>
+                  <Button variant="outline" className="w-full">
+                    Edit Profile
+                  </Button>
+                </Link>
                 <Button variant="outline" className="w-full">
                   Change Password
                 </Button>

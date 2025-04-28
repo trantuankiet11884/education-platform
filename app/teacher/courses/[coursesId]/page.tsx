@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/auth-provider";
+import Link from "next/link";
 
 export default function TeacherCourseDetailPage({
   params,
@@ -115,21 +116,12 @@ export default function TeacherCourseDetailPage({
                 </p>
               </div>
               <div className="flex gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    router.push(`/teacher/courses/${coursesId}/edit`)
-                  }
-                >
-                  Edit Course
-                </Button>
-                <Button
-                  onClick={() =>
-                    router.push(`/teacher/courses/${coursesId}/lessons/new`)
-                  }
-                >
-                  Add Lesson
-                </Button>
+                <Link href={`/teacher/courses/${coursesId}/edit`}>
+                  <Button variant="outline">Edit Course</Button>
+                </Link>
+                <Link href={`/teacher/courses/${coursesId}/lessons/new`}>
+                  <Button>Add Lesson</Button>
+                </Link>
               </div>
             </div>
             <div className="flex items-center gap-4 mt-4">
@@ -217,17 +209,13 @@ export default function TeacherCourseDetailPage({
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                router.push(
-                                  `/teacher/courses/${coursesId}/lessons/${lesson._id}/edit`
-                                )
-                              }
+                            <Link
+                              href={`/teacher/courses/${coursesId}/lessons/${lesson._id}/edit`}
                             >
-                              Edit
-                            </Button>
+                              <Button variant="outline" size="sm">
+                                Edit
+                              </Button>
+                            </Link>
                             <Button variant="destructive" size="sm">
                               Delete
                             </Button>

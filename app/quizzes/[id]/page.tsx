@@ -346,19 +346,14 @@ export default function QuizDetailPage({
                 </div>
               </CardContent>
               <CardFooter className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => router.push("/quizzes")}
-                >
-                  Back to Quizzes
-                </Button>
-                <Button
-                  className="flex-1"
-                  onClick={() => router.push("/dashboard")}
-                >
-                  Go to Dashboard
-                </Button>
+                <Link href={"/quizzes"}>
+                  <Button variant="outline" className="flex-1">
+                    Back to Quizzes
+                  </Button>
+                </Link>
+                <Link href={"/"}>
+                  <Button className="flex-1">Go to Dashboard</Button>
+                </Link>
               </CardFooter>
             </Card>
           ) : (

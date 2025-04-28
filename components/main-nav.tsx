@@ -16,6 +16,8 @@ import {
   Layers,
   Users,
   CircleHelp,
+  BookText,
+  CircleDollarSign,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -62,14 +64,24 @@ export const MainNav = () => {
           icon: <PieChart className="mr-2 h-4 w-4" />,
         },
         {
-          href: "/teacher/courses",
-          label: "My Courses",
+          href: "/teacher/dashboard",
+          label: "Courses",
           icon: <BookOpen className="mr-2 h-4 w-4" />,
         },
         {
           href: "/teacher/quizzes",
-          label: "My Quizzes",
+          label: "Quizzes",
           icon: <CircleHelp className="mr-2 h-4 w-4" />,
+        },
+        {
+          href: "/teacher/books",
+          label: "Books",
+          icon: <BookText className="mr-2 h-4 w-4" />,
+        },
+        {
+          href: "/teacher/payments",
+          label: "Income",
+          icon: <CircleDollarSign className="mr-2 h-4 w-4" />,
         },
       ],
       admin: [
@@ -87,6 +99,11 @@ export const MainNav = () => {
           href: "/admin/courses",
           label: "Courses",
           icon: <Layers className="mr-2 h-4 w-4" />,
+        },
+        {
+          href: "/admin/books",
+          label: "Books",
+          icon: <BookText className="mr-2 h-4 w-4" />,
         },
       ],
     },
@@ -182,7 +199,7 @@ export const MainNav = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950"
-                onClick={handleSignOut} // Gắn hàm signOut vào đây
+                onClick={handleSignOut}
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Logout</span>

@@ -46,6 +46,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Course } from "@/lib/data";
+import Link from "next/link";
 
 export default function AdminCoursesPage() {
   const { user, loading } = useAuth();
@@ -245,9 +246,9 @@ export default function AdminCoursesPage() {
                   View and manage all courses on the platform
                 </p>
               </div>
-              <Button onClick={() => router.push("/admin/courses/new")}>
-                Add New Course
-              </Button>
+              <Link href={"/admin/courses/new"}>
+                <Button>Add New Course</Button>
+              </Link>
             </div>
 
             <Card>
@@ -359,15 +360,11 @@ export default function AdminCoursesPage() {
                                 >
                                   Edit
                                 </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() =>
-                                    router.push(`/admin/courses/${course._id}`)
-                                  }
-                                >
-                                  View
-                                </Button>
+                                <Link href={`/admin/courses/${course._id}`}>
+                                  <Button variant="ghost" size="sm">
+                                    View
+                                  </Button>
+                                </Link>
                                 <Button
                                   variant="ghost"
                                   size="sm"

@@ -18,6 +18,7 @@ import { useAuth } from "@/lib/auth-provider";
 import { Course } from "@/lib/data";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -40,7 +41,7 @@ export default function TeacherDashboardPage() {
     queryKey: ["teacher-courses", user?._id],
     queryFn: async () => {
       const response = await axios.get(`/api/courses/instructor/${user?._id}`);
-      return response.data.data || []; // Extract 'data' field, default to empty array if undefined
+      return response.data.data || [];
     },
     enabled: !!user && user.role === "teacher",
   });
@@ -61,7 +62,7 @@ export default function TeacherDashboardPage() {
   }
 
   if (!user || user.role !== "teacher") {
-    return null; // Redirect handled in useEffect
+    return null;
   }
 
   return (
@@ -71,8 +72,8 @@ export default function TeacherDashboardPage() {
           <MainNav />
         </div>
       </header>
-      <main className="flex-1 p-2">
-        <div className="container py-12">
+      <main className="flex-1 p-2 container mx-auto">
+        <div className="container py-12 mx-auto">
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <div>
@@ -81,9 +82,9 @@ export default function TeacherDashboardPage() {
                   Manage your courses and students
                 </p>
               </div>
-              <Button onClick={() => router.push("/teacher/courses/new")}>
-                Create New Course
-              </Button>
+              <Link href={"/teacher/courses/new"}>
+                <Button>Create New Course</Button>
+              </Link>
             </div>
 
             <Tabs defaultValue="courses">
@@ -101,12 +102,9 @@ export default function TeacherDashboardPage() {
                     <p className="text-muted-foreground mt-2">
                       Create your first course to get started
                     </p>
-                    <Button
-                      className="mt-4"
-                      onClick={() => router.push("/teacher/courses/new")}
-                    >
-                      Create Course
-                    </Button>
+                    <Link href={"/teacher/courses/new"}>
+                      <Button className="mt-4">Create New Course</Button>
+                    </Link>
                   </div>
                 ) : (
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

@@ -209,6 +209,10 @@ export const booksApi = {
     const response = await api.get<Book[]>("/books");
     return response.data;
   },
+  getAllById: async (id: string) => {
+    const response = await api.get<Book[]>(`/books/user/${id}`);
+    return response.data;
+  },
   getById: async (id: string) => {
     const response = await api.get<Book>(`/books/${id}`);
     return response.data;

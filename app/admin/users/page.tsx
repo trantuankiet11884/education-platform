@@ -42,6 +42,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import Link from "next/link";
 
 export default function AdminUsersPage() {
   const { user, loading } = useAuth();
@@ -188,9 +189,9 @@ export default function AdminUsersPage() {
                   View and manage all users on the platform
                 </p>
               </div>
-              <Button onClick={() => router.push("/admin/users/new")}>
-                Add New User
-              </Button>
+              <Link href={"/admin/users/new"}>
+                <Button>Add New User</Button>
+              </Link>
             </div>
 
             <Card>
@@ -263,15 +264,11 @@ export default function AdminUsersPage() {
                                 >
                                   Edit
                                 </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() =>
-                                    router.push(`/admin/users/${user._id}`)
-                                  }
-                                >
-                                  View
-                                </Button>
+                                <Link href={`/admin/users/${user._id}`}>
+                                  <Button variant="ghost" size="sm">
+                                    View
+                                  </Button>
+                                </Link>
                               </div>
                             </td>
                           </tr>

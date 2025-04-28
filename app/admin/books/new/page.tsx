@@ -24,6 +24,7 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 
 export default function NewBookPage() {
   const { user, loading } = useAuth();
@@ -143,12 +144,9 @@ export default function NewBookPage() {
                   Add a new book to the platform
                 </p>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/admin/books")}
-              >
-                Cancel
-              </Button>
+              <Link href="/admin/books">
+                <Button variant="outline">Cancel</Button>
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -270,13 +268,11 @@ export default function NewBookPage() {
                   )}
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => router.push("/admin/books")}
-                  >
-                    Cancel
-                  </Button>
+                  <Link href="/admin/books">
+                    <Button variant="outline" type="button">
+                      Cancel
+                    </Button>
+                  </Link>
                   <Button type="submit" disabled={createBookMutation.isPending}>
                     {createBookMutation.isPending ? (
                       <>

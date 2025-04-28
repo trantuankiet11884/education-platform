@@ -22,6 +22,7 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 
 export default function NewLessonPage({
   params,
@@ -146,12 +147,9 @@ export default function NewLessonPage({
                   Adding lesson to: {course?.title}
                 </p>
               </div>
-              <Button
-                variant="outline"
-                onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-              >
-                Cancel
-              </Button>
+              <Link href={`/teacher/courses/${coursesId}`}>
+                <Button variant="outline">Cancel</Button>
+              </Link>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -253,13 +251,11 @@ export default function NewLessonPage({
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    onClick={() => router.push(`/teacher/courses/${coursesId}`)}
-                  >
-                    Cancel
-                  </Button>
+                  <Link href={`/teacher/courses/${coursesId}`}>
+                    <Button variant="outline" type="button">
+                      Cancel
+                    </Button>
+                  </Link>
                   <Button
                     type="submit"
                     disabled={createLessonMutation.isPending}

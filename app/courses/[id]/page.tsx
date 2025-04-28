@@ -301,7 +301,14 @@ export default function CoursePage({
                       </div>
                     </div>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-2">
+                    {course.price > 0 && (
+                      <Link href={`/payment/${course._id}`} className="w-full">
+                        <Button className="w-full" variant="outline">
+                          Buy Now
+                        </Button>
+                      </Link>
+                    )}
                     <Button
                       className="w-full"
                       onClick={handleEnroll}

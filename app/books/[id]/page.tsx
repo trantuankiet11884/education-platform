@@ -108,7 +108,7 @@ export default function BookDetailPage({
         </div>
       </header>
       <main className="flex-1 max-w-7xl mx-auto">
-        <div className="container py-12">
+        <div className="container py-12 max-w-7xl mx-auto">
           <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
             <div>
               <div className="sticky top-24">
@@ -166,25 +166,6 @@ export default function BookDetailPage({
                 </CardHeader>
                 <CardContent>
                   <p>{book.description}</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>About the Author</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                      {book.createdBy.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="font-medium">{book.createdBy.name}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {book.createdBy.bio}
-                      </p>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
 

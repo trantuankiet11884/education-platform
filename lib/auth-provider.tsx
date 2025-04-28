@@ -83,6 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         firebaseId: firebaseUser.uid,
         name: firebaseUser.displayName || "User",
         email: firebaseUser.email || "",
+        paypalEmail: firebaseUser.email || "",
         role: "student" as const,
         createdAt: new Date().toISOString(),
       };
@@ -140,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name,
         email,
         role,
+        paypalEmail: email,
         createdAt: new Date().toISOString(),
       };
       const userData = await usersApi.create(newUser);
