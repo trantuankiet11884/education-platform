@@ -76,7 +76,7 @@ export function HeroSection() {
           <div className="flex items-center justify-center">
             <div className="relative h-[350px] w-full overflow-hidden rounded-xl bg-muted/50">
               <img
-                src="/placeholder.svg?height=350&width=600"
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
                 alt="Hero Image"
                 className="object-cover w-full h-full"
               />

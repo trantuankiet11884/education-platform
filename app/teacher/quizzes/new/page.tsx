@@ -104,8 +104,8 @@ export default function CreateQuizPage() {
           <MainNav />
         </div>
       </header>
-      <main className="flex-1">
-        <div className="container py-6">
+      <main className="flex-1 ">
+        <div className="container py-6 px-2">
           <h1 className="text-3xl font-bold mb-6">Create New Quiz</h1>
           <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto">
             <div>

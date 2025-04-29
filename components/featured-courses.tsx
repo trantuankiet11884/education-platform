@@ -1,29 +1,19 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { coursesApi } from "@/lib/api";
 import { Course } from "@/lib/data";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import CardCourse from "./course/card-course";
 
 export function FeaturedCourses() {
-  // Sử dụng API thực tế để lấy danh sách khóa học
   const { data: allCourses = [], isLoading } = useQuery({
     queryKey: ["featured-courses"],
     queryFn: () => coursesApi.getAll(),
   });
 
-  // Lấy 3 khóa học có số lượng đăng ký cao nhất
   const featuredCourses = allCourses.data
     ?.sort(
       (a: { enrollmentCount: number }, b: { enrollmentCount: number }) =>
@@ -77,46 +67,7 @@ export function FeaturedCourses() {
             </div>
           ) : (
             featuredCourses.map((course: Course) => (
-              <Card
-                key={course._id}
-                className="flex flex-col overflow-hidden border shadow-sm"
-              >
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={
-                      course.thumbnail ||
-                      "/placeholder.svg?height=200&width=300"
-                    }
-                    alt={course.title}
-                    className="object-cover w-full h-full transition-all hover:scale-105"
-                  />
-                  <Badge className="absolute top-2 right-2">
-                    {course.category}
-                  </Badge>
-                </div>
-                <CardHeader className="flex-1">
-                  <CardTitle>{course.title}</CardTitle>
-                  <CardDescription>{course.shortDescription}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-4 text-sm">
-                    <div className="flex items-center gap-1">
-                      <Icons.bookOpen className="h-4 w-4" />
-                      <span>{course.lessonCount} lessons</span>
-                    </div>
-                    <div>
-                      <span className="font-medium">
-                        ${course.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link href={`/courses/${course._id}`} className="w-full">
-                    <Button className="w-full">View Course</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
+              <CardCourse key={course._id} course={course} />
             ))
           )}
         </div>

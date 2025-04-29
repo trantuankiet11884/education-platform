@@ -1,6 +1,6 @@
-import { TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
+"use client";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { TabsContent } from "@/components/ui/tabs";
+import { Review } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Edit, Star, Trash } from "lucide-react";
+import { useState } from "react";
 import ReviewForm from "../reviews/review-form";
-import { Review } from "@/lib/data";
-import { useRef } from "react";
 
 interface TabsReviewsProps {
   reviews: Review[];
@@ -35,13 +36,8 @@ export default function TabsReviews({
   updateReviewMutation,
   deleteReviewMutation,
 }: TabsReviewsProps) {
-  const dialogRef = useRef<HTMLButtonElement>(null);
-
-  const closeDialog = () => {
-    if (dialogRef.current) {
-      dialogRef.current.click();
-    }
-  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   return (
     <TabsContent value="reviews" className="mt-4">
@@ -49,11 +45,9 @@ export default function TabsReviews({
         <div className="flex justify-between items-center">
           <h3 className="text-xl font-bold">Student Reviews</h3>
           {isEnrolled && (
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button ref={dialogRef}>
-                  {userReview ? "Edit Review" : "Add Review"}
-                </Button>
+                <Button>{userReview ? "Edit Review" : "Add Review"}</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -62,6 +56,10 @@ export default function TabsReviews({
                   </DialogTitle>
                 </DialogHeader>
                 <ReviewForm
+                  isLoading={
+                    createReviewMutation.isPending ||
+                    updateReviewMutation.isPending
+                  }
                   courseId={courseId}
                   userId={user?._id}
                   initialData={userReview}
@@ -70,12 +68,12 @@ export default function TabsReviews({
                       updateReviewMutation.mutate(
                         { id: userReview._id, data },
                         {
-                          onSuccess: closeDialog,
+                          onSuccess: () => setIsDialogOpen(false),
                         }
                       );
                     } else {
                       createReviewMutation.mutate(data, {
-                        onSuccess: closeDialog,
+                        onSuccess: () => setIsDialogOpen(false),
                       });
                     }
                   }}
@@ -124,7 +122,10 @@ export default function TabsReviews({
                         </div>
                         {user?._id === review?.userId?._id && (
                           <div className="mt-2 flex gap-2">
-                            <Dialog>
+                            <Dialog
+                              open={isEditDialogOpen}
+                              onOpenChange={setIsEditDialogOpen}
+                            >
                               <DialogTrigger asChild>
                                 <Button variant="outline" size="sm">
                                   <Edit />
@@ -135,6 +136,7 @@ export default function TabsReviews({
                                   <DialogTitle>Edit Review</DialogTitle>
                                 </DialogHeader>
                                 <ReviewForm
+                                  isLoading={updateReviewMutation.isPending}
                                   courseId={courseId}
                                   userId={user._id}
                                   initialData={{
@@ -146,7 +148,8 @@ export default function TabsReviews({
                                     updateReviewMutation.mutate(
                                       { id: review._id, data },
                                       {
-                                        onSuccess: closeDialog,
+                                        onSuccess: () =>
+                                          setIsEditDialogOpen(false),
                                       }
                                     );
                                   }}

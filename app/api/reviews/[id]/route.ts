@@ -25,7 +25,7 @@ export async function PUT(
 
     // Check if the user is enrolled
     const enrollment = await Enrollment.findOne({
-      userId: new mongoose.Types.ObjectId(userId),
+      userId: new mongoose.Types.ObjectId(userId?._id),
       courseId: new mongoose.Types.ObjectId(courseId),
     });
     if (!enrollment) {
@@ -38,7 +38,7 @@ export async function PUT(
     // Find and update the review
     const review = await Review.findOne({
       _id: id,
-      userId: new mongoose.Types.ObjectId(userId),
+      userId: new mongoose.Types.ObjectId(userId?._id),
     });
     if (!review) {
       return NextResponse.json(

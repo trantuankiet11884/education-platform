@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/icons";
 
 interface ReviewFormProps {
+  isLoading: boolean;
   courseId: string;
   userId?: string;
   onSubmit: (data: { rating: number; comment: string }) => void;
@@ -12,6 +13,7 @@ interface ReviewFormProps {
 }
 
 export default function ReviewForm({
+  isLoading,
   courseId,
   userId,
   onSubmit,
@@ -64,13 +66,19 @@ export default function ReviewForm({
         />
       </div>
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? (
-          <>
-            <Icons.logo className="mr-2 h-4 w-4 animate-spin" />
-            {initialData ? "Updating..." : "Submitting..."}
-          </>
+        {isLoading ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <>{initialData ? "Update Review" : "Submit Review"}</>
+          <>
+            {isSubmitting ? (
+              <>
+                <Icons.logo className="mr-2 h-4 w-4 animate-spin" />
+                {initialData ? "Updating..." : "Submitting..."}
+              </>
+            ) : (
+              <>{initialData ? "Update Review" : "Submit Review"}</>
+            )}
+          </>
         )}
       </Button>
     </form>
